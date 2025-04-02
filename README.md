@@ -3,9 +3,8 @@
 ##			Film emulation pack for Darktable		
 [![Latest release](https://img.shields.io/github/release/t3mujin/t3mujinpack.svg?style=flat-square)](https://github.com/t3mujinpack/t3mujinpack/releases)
 [![t3mujinpack tag on Flickr](https://img.shields.io/badge/t3mujinpack-flickr-ff69b4.svg?style=flat-square)](https://www.flickr.com/photos/tags/t3mujinpack)
-[![#t3mujin hashtag on Instagram](https://img.shields.io/badge/%23t3mujinpack-instagram-ff69b4.svg?style=flat-square)](https://www.instagram.com/explore/tags/t3mujinpack/)
+[![#t3mujinpack hashtag on Instagram](https://img.shields.io/badge/%23t3mujinpack-instagram-ff69b4.svg?style=flat-square)](https://www.instagram.com/explore/tags/t3mujinpack/)
 [![Donate on Paypal](https://img.shields.io/badge/donate-paypal-yellow.svg?style=flat-square)](https://paypal.me/t3mujin)
-[![Register Newsletter](https://img.shields.io/badge/register-newsletter-lightgrey.svg?style=flat-square)](http://eepurl.com/cdvLev)
 [![Visit main site](https://img.shields.io/badge/visit-main%20site-lightgrey.svg?style=flat-square)](https://t3mujinpack.github.io)
 
 
