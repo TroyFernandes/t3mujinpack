@@ -1,0 +1,77 @@
+# Workflow to create a release of Darktable styles and LUTs
+
+name: Darktable Release
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'blackwhite/**'
+      - 'colornegative/**'
+      - 'colorslide/**'
+      - 'haldcluts/**'
+      - '.github/workflows/**'
+  workflow_dispatch:
+
+jobs:
+  dt:
+    runs-on: ubuntu-latest
+    container:
+      image: linuxserver/darktable:latest
+    #   env:
+    #     PUID: 1000
+    #     PGID: 1000
+    #   options: --user 1000:1000
+      
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+        # Generates the necessary files and folders for darktable
+      - name: init darktable-cli
+        run: |
+          darktable-cli haldcluts/Hald_CLUT_Identity.tif out.jpg --core --configdir /config/.config/darktable/
+
+      - name: Copy all styles to darktable's style folder
+        run: |
+            find blackwhite colornegative colorslide -type f -name '*.dtstyle' -exec cp {} /usr/share/darktable/styles/ \;
+        
+        # Creates the LUTs from the styles using the name of the actual style
+      - name: Generate LUTs from styles
+        run: |
+            mkdir -p output-luts
+            for file in blackwhite/*.dtstyle colornegative/*.dtstyle colorslide/*.dtstyle; do
+            raw_style_name=$(xmllint --xpath "string(//name)" "$file")
+            style_name="${raw_style_name//|/ - }"  # replace "|" with " - "
+            echo "Processing style: $raw_style_name → $style_name"
+            darktable-cli haldcluts/Hald_CLUT_Identity.tif "output-luts/${style_name}.png" --style "$raw_style_name"
+            done
+
+      - name: Organize files into release folder
+        run: |
+            mkdir -p release/haldcluts
+            cp -r blackwhite colornegative colorslide release/
+            cp -r output-luts/* release/haldcluts/
+
+      - name: Create ZIP archive
+        run: |
+            pacman -Sy --noconfirm zip
+            cd release
+            zip -r ../dt-simulations.zip .
+
+      # - name: Create tar
+      #   run: |
+      #       tar cfz dt-simulations.tar.gz release/
+
+      - name: Set release tag as date
+        id: set_tag
+        run: echo "tag=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dt-simulations.zip
+          name: ${{ steps.set_tag.outputs.tag }}
